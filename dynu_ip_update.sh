@@ -1,16 +1,20 @@
 #! /bin/bash
 
+# IP Info
+IP_INFO="ipinfo.io/ip"
+
 # API Requests
 API_CHECK="https://api.dynu.com/v2/dns/getroot/"
 API_UPDATE="https://api.dynu.com/v2/dns"
 
 # Extract API call status code & error type
-API_response() {
-        # echo "RESPONSE:    $1"
-        status=$(jq -r ".statusCode" <<< $1)
+parse_api_response() {
+        local response="${1}"
+        # echo "RESPONSE:    ${response}"
+        status=$(jq -r ".statusCode" <<< ${response})
         # echo "STATUS CODE: ${status}"
-        if [[ "${status}" != "200" ]]; then
-                type=$(jq -r ".type" <<< $1)
+        if [[ ${status} != 200 ]]; then
+                type=$(jq -r ".type" <<< ${response})
                 # echo "TYPE:        ${type}"
         fi
 }
@@ -23,14 +27,14 @@ echo
 
 # Checking/Installing dependencies
 j_path=$(command -v jq)
-if [ $? -ne 0  ]; then
+if [[ $? -ne 0  ]]; then
         echo "Installing jq"
         sudo yum install jq -y &> /dev/null
 else
         echo "Found jq  : ${j_path}"
 fi
 c_path=$(command -v curl)
-if [ $? -ne 0 ]; then
+if [[ $? -ne 0 ]]; then
         echo "Installing curl"
         sudo yum install curl -y &> /dev/null
 else
@@ -46,23 +50,29 @@ echo "API TOKEN:   ${API_TOKEN}"
 echo "HOSTNAME:    ${HOST_NAME}" 
 
 # Get public IP v4
-ip=$(curl --silent -X GET ipinfo.io/ip)
+ip=$(curl \
+        --silent \
+        --request GET \
+        "${IP_INFO}")
+if [[ $? -ne 0 ]]; then
+        echo "ERROR: Could not get IP address from ${IP_INFO}"
+        exit 1
+fi
 echo "IP:          ${ip}"
-
 echo
 
 # Check DNS record 
 request="${API_CHECK}${HOST_NAME}"
 response=$(curl \
                 --silent \
-                -X GET "${request}" \
-                -H "accept: application/json" \
-                -H "API-Key: ${API_TOKEN}")
-if [ $? -ne 0 ]; then
+                --header "accept: application/json" \
+                --header "API-Key: ${API_TOKEN}" \
+                --request GET "${request}")
+if [[ $? -ne 0 ]]; then
         echo "ERROR: Request ${API_CHECK}${HOST_NAME} failed"
         exit 1
 fi
-API_response "${response}"
+parse_api_response "${response}"
 if [[ "${status}" == "200" ]]; then
         id=$(jq -r ".id" <<< ${response})
         # echo "ID:          ${id}"
@@ -75,11 +85,11 @@ case ${status} in
                 request="${API_UPDATE}/${id}"
                 response=$(curl \
                                 --silent \
-                                -X POST "${request}" \
-                                -H "accept: application/json" \
-                                -H "content-type: application/json" \
-                                -H "API-Key: ${API_TOKEN}" \
-                                -d "{ \"name\": \"${HOSTNAME}\", \"ipv4Address\": \"${ip}\" }")
+                                --header "accept: application/json" \
+                                --header "content-type: application/json" \
+                                --header "API-Key: ${API_TOKEN}" \
+                                --request POST "${request}" \
+                                --data "{ \"name\": \"${HOSTNAME}\", \"ipv4Address\": \"${ip}\" }")
                 ;;
         501)
                 echo "Found no A record for ${HOST_NAME}"
@@ -87,11 +97,11 @@ case ${status} in
                 request="${API_UPDATE}"
                 response=$(curl \
                                 --silent \
-                                -X POST "${API_UPDATE}" \
-                                -H "accept: application/json" \
-                                -H "content-type: application/json" \
-                                -H "API-Key: ${API_TOKEN}" \
-                                -d "{ \"name\": \"${HOST_NAME}\", \"ipv4Address\": \"${ip}\" }")
+                                --header "accept: application/json" \
+                                --header "content-type: application/json" \
+                                --header "API-Key: ${API_TOKEN}" \
+                                --request POST "${API_UPDATE}" \
+                                --data "{ \"name\": \"${HOST_NAME}\", \"ipv4Address\": \"${ip}\" }")
                 ;;
         401|404|500|502)
                 echo "STATUS CODE: ${status} FAILURE: ${type}"
@@ -100,12 +110,12 @@ case ${status} in
 esac
 
 echo
-if [ $? -ne 0 ]; then
+if [[ $? -ne 0 ]]; then
         echo "ERROR: Request ${request} failed"
         exit 1
 fi
-API_response "${response}"
-if [[ ${status} == "200" ]]; then
+parse_api_response "${response}"
+if [[ ${status} == 200 ]]; then
         echo "SUCCESS"
         exit 0
 else
