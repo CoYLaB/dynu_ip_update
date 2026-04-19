@@ -124,4 +124,4 @@ if [[ ${status} == 200 ]]; then
 else
         echo "FAILURE ${status}: ${type}"
         exit 1
-fi                                                                                                                                                                114,1         Bo
+fi
