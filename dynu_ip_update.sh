@@ -1,7 +1,13 @@
 #!/usr/bin/env bash
 
 # Script directory
-SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+SHELL_PROCESS=`ps -p $$ | sed -n 2p`
+if [[ "${SHELL_PROCESS}" == *"zsh"* ]]; then
+  RELEVANT_BASH_SOURCE="${(%):-%N}"
+else
+  RELEVANT_BASH_SOURCE="${BASH_SOURCE[0]}"
+fi
+SCRIPT_DIR=$( cd -- "$( dirname -- "${RELEVANT_BASH_SOURCE}" )" >/dev/null 2>&1 ; pwd -P )
 
 # IP Info Site
 IP_INFO="ipinfo.io/ip"
@@ -46,7 +52,7 @@ fi
 echo
 
 # Read Dynu config file
-source ${SCRIPT_DIR}/dynu.cfg
+source "${SCRIPT_DIR}/dynu.cfg"
 
 # Display config
 echo "API TOKEN:   ${API_TOKEN}"
