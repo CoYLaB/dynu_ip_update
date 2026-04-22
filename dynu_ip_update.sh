@@ -52,7 +52,12 @@ fi
 echo
 
 # Read Dynu config file
-source "${SCRIPT_DIR}/dynu.cfg"
+if [[ -e ${SCRIPT_DIR}/dynu.cfg ]]; then
+  source "${SCRIPT_DIR}/dynu.cfg"
+  echo "ERROR: Could not read ${SCRIPT_DIR}/dynu.cfg"
+  exit 1
+else
+fi
 
 # Display config
 echo "API TOKEN:   ${API_TOKEN}"
