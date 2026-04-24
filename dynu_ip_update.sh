@@ -6,8 +6,6 @@
 # located in the same directory. The configuration
 # file also contains the Dynu API token for making the
 # relevant API calle for updating the record.
-# 
-# 
 
 # Script directory
 SHELL_PROCESS=`ps -p $$ | sed -n 2p`
