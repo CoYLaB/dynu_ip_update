@@ -55,7 +55,7 @@ echo
 if [[ -e ${SCRIPT_DIR}/dynu.cfg ]]; then
   source "${SCRIPT_DIR}/dynu.cfg"
 else
-  echo "ERROR: Could not read ${SCRIPT_DIR}/dynu.cfg"
+  >&2 echo "ERROR: Could not read ${SCRIPT_DIR}/dynu.cfg"
   exit 1
 fi
 
@@ -69,9 +69,10 @@ ip=$( curl \
         --request GET \
         "${IP_INFO}" )
 if [[ $? -ne 0 ]]; then
-        echo "ERROR: Could not get IP address from ${IP_INFO}"
+        >&2 echo "ERROR: Could not get IP address from ${IP_INFO}"
         exit 1
 fi
+
 echo "IP:          ${ip}"
 echo
 
@@ -83,13 +84,12 @@ response=$( curl \
                 --header "API-Key: ${API_TOKEN}" \
                 --request GET "${request}" )
 if [[ $? -ne 0 ]]; then
-        echo "ERROR: Request ${API_CHECK}${HOST_NAME} failed"
+        >&2 echo "ERROR: Request ${API_CHECK}${HOST_NAME} failed"
         exit 1
 fi
 parse_api_response "${response}"
 if [[ "${status}" == "200" ]]; then
         id=$( jq -r ".id" <<< ${response} )
-        # echo "ID:          ${id}"
 fi
 
 case ${status} in
@@ -125,7 +125,7 @@ esac
 
 echo
 if [[ $? -ne 0 ]]; then
-        echo "ERROR: Request ${request} failed"
+        >&2 echo "ERROR: Request ${request} failed"
         exit 1
 fi
 parse_api_response "${response}"
@@ -133,6 +133,6 @@ if [[ ${status} == 200 ]]; then
         echo "SUCCESS"
         exit 0
 else
-        echo "FAILURE ${status}: ${type}"
+        >&2 echo "FAILURE ${status}: ${type}"
         exit 1
 fi
