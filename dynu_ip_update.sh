@@ -1,4 +1,13 @@
 #!/usr/bin/env bash
+#
+# Simple script to update the Dynu A records for a host
+# with the IP of the current machine. The host name
+# is retrieved from the configuration file dynu.cfg
+# located in the same directory. The configuration
+# file also contains the Dynu API token for making the
+# relevant API calle for updating the record.
+# 
+# 
 
 # Script directory
 SHELL_PROCESS=`ps -p $$ | sed -n 2p`
@@ -52,10 +61,16 @@ fi
 echo
 
 # Read Dynu config file
+echo "Reading config file..."
 if [[ -e ${SCRIPT_DIR}/dynu.cfg ]]; then
   source "${SCRIPT_DIR}/dynu.cfg"
 else
-  >&2 echo "ERROR: Could not read ${SCRIPT_DIR}/dynu.cfg"
+  >&2 echo "ERROR: No config file found. Create ${SCRIPT_DIR}/dynu.cfg (cf README.txt for more info)"
+  exit 1
+fi
+
+if [[ -z ${API_TOKEN} || -z ${HOST_NAME} ]]; then
+  >&2 echo "ERROR: Could not read config file ${SCRIPT_DIR}/dynu.cfg (cf README.txt for more info)"
   exit 1
 fi
 
