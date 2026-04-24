@@ -54,9 +54,9 @@ echo
 # Read Dynu config file
 if [[ -e ${SCRIPT_DIR}/dynu.cfg ]]; then
   source "${SCRIPT_DIR}/dynu.cfg"
+else
   echo "ERROR: Could not read ${SCRIPT_DIR}/dynu.cfg"
   exit 1
-else
 fi
 
 # Display config
