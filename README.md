@@ -9,10 +9,11 @@ The sample file `<install>/SAMPLE-dynu.cfg` can be renamed and edited to replace
 
 ## Installation
 
-1. Download and extract the files to any directory you want or alternatively clone the repository
-
+1. Download and extract the files to any directory you want or alternatively clone the repository:
 ```bash
 git clone --sparse https://github.com/CoYLaB/dynu_ip_update.git /home/ec2-user/<install>
 ```
+2. Copy `SAMPLE-dynu.cfg` to `dynu.cfg` in the same directory.
+3. Edit the `HOST_NAME` variable and replace the `API_TOKEN` with your own Dynu authentication credential.
 
 ## Running the script
