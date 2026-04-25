@@ -108,7 +108,7 @@ fi
 case ${status} in
         200)
                 echo "Found A record for ${HOST_NAME} with id ${id}"
-                echo "Updating it with ip ${ip}"
+                echo "Updating with ip ${ip}"
                 request="${API_UPDATE}/${id}"
                 response=$( curl \
                                 --silent \
