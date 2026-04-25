@@ -1,7 +1,7 @@
 # Dynu IP Update Script
 
 Simple script to update the [Dynu](https://www.dynu.com/) A record for a host with the IP of the current machine.
-This comes particularly useful for cloud instances that do not use static IP (an AWS EC2 example using cloud-init is given below).
+This comes particularly useful for cloud instances that do not use static IPs (an AWS EC2 example using cloud-init is given below).
 
 The host name is retrieved from the configuration file `<install>/dynu.cfg`. 
 The configuration file also contains the Dynu API token required to make the API calls for updating the record.
