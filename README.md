@@ -14,7 +14,7 @@ The sample file `<install>/SAMPLE-dynu.cfg` can be renamed and edited to replace
 ```$git clone --sparse https://github.com/CoYLaB/dynu_ip_update.git /home/ec2-user/<install>```
 3. Copy `SAMPLE-dynu.cfg` to `dynu.cfg` in the same directory.
 4. Edit the `HOST_NAME` variable and replace the `API_TOKEN` with your own Dynu authentication credential available from the [Control Panel](https://www.dynu.com/en-US/ControlPanel/APICredentials).
-5. Make the script executable
+5. Make the script executable:\
 ```$chmod u+x <install>/dynu_ip_update.sh```
 
 ## Running the script
