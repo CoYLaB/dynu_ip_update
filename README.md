@@ -13,7 +13,7 @@ The sample file `<install>/SAMPLE-dynu.cfg` can be renamed and edited to replace
 1. Download and extract the files to any directory you want or alternatively clone the repository:
 
 ```bash
-\t$git clone --sparse https://github.com/CoYLaB/dynu_ip_update.git /home/ec2-user/<install>
+$git clone --sparse https://github.com/CoYLaB/dynu_ip_update.git /home/ec2-user/<install>
 ```
 
 3. Copy `SAMPLE-dynu.cfg` to `dynu.cfg` in the same directory.
@@ -25,5 +25,6 @@ The sample file `<install>/SAMPLE-dynu.cfg` can be renamed and edited to replace
 
 At a command prompt run the following command:
 
-```bash <install>/dynu_ip_update.sh
+```bash
+$ <install>/dynu_ip_update.sh
 ```
