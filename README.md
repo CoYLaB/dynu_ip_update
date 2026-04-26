@@ -19,8 +19,5 @@ The sample file `<install>/SAMPLE-dynu.cfg` can be renamed and edited to replace
 
 ## Running the script
 
-At a command prompt run the following command:
-
-```bash
-$ <install>/dynu_ip_update.sh
-```
+At a command prompt run the following command:\
+```$ <install>/dynu_ip_update.sh```
