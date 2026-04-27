@@ -21,4 +21,20 @@ The sample file `<install>/SAMPLE-dynu.cfg` can be renamed and edited to replace
 
 ### Manually
 At a command prompt run the following command:\
-```$ <install>/dynu_ip_update.sh```
+```
+$ <install>/dynu_ip_update.sh
+```
+
+### Automatically at boot time
+#### Linux cron
+```
+$ crontab -e
+@reboot <install>/dynu_ip_update.sh
+```
+
+#### MacOS launchd
+
+Soon...
+
+#### AWS EC2 cloud-init
+
